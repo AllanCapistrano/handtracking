@@ -6,8 +6,7 @@ from handDetector import HandDetector
 WEBCAM_INDEX = 0
 
 def main():
-    previous_time = 0
-    current_time = 0
+    fps_start_time = 0
 
     hand_detector = HandDetector()
 
@@ -24,9 +23,9 @@ def main():
             if(len(hands) > 0):
                 print(hands[0]["landmarks"][6])
 
-            current_time = time()
-            fps = 1/(current_time - previous_time)
-            previous_time = current_time
+            fps_end_time = time()
+            fps = 1/(fps_end_time - fps_start_time)
+            fps_start_time = fps_end_time
 
             cv2.putText(image_with_landmarks, f"FPS: {int(fps)}", (10, 40), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 255), 3)
 
