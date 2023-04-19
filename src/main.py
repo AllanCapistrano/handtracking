@@ -1,4 +1,5 @@
 from time import time
+from typing import List, Dict
 
 import cv2
 from handDetector import HandDetector
@@ -22,7 +23,7 @@ def main():
 
             hand_detector.process_image(frame)
             image_with_landmarks = hand_detector.draw_landmarks()
-            hands = hand_detector.find_positions()
+            hands: List[Dict] = hand_detector.find_positions()
 
             if(len(hands) > 0):
                 print(hands[0]["landmarks"][6])
