@@ -14,10 +14,10 @@ def main():
     webcam = cv2.VideoCapture(WEBCAM_INDEX)
 
     while(True):
-        success, image = webcam.read()
+        success, frame = webcam.read()
 
         if(success):
-            hand_detector.process_image(image)
+            hand_detector.process_image(frame)
             image_with_landmarks = hand_detector.draw_landmarks()
             hands = hand_detector.find_positions()
 
