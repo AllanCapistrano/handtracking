@@ -31,8 +31,12 @@ def main():
             cv2.putText(image_with_landmarks, f"FPS: {int(fps)}", (10, 40), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 255), 3)
 
             cv2.imshow("Webcam", image_with_landmarks)
-            cv2.waitKey(1)
+            key = cv2.waitKey(1)
 
+            if(key == 81 or key == 113):
+                break
+    
+    webcam.release()
 
 if __name__ == "__main__":
     main()
