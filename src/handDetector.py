@@ -3,6 +3,9 @@ from typing import List, Dict
 from mediapipe import solutions
 from cv2 import Mat, cvtColor, COLOR_BGR2RGB
 
+THUMB_TIP: int = 4
+PINKY_TIP: int = 20
+
 class HandDetector:
     def __init__(
         self, 
@@ -75,7 +78,6 @@ class HandDetector:
 
         return self.image
     
-    
     def find_positions(self) -> List[Dict]:
         """ Retorna uma lista contendo as posições (eixo x e y, em pixels) dos 
         pontos de detecção das mãos presentes em uma imagem.
@@ -114,3 +116,33 @@ class HandDetector:
                 hand_id += 1
 
         return hands
+    
+    def hand_orientation(self, hand: Dict) -> str:
+        """ Indica se é a mão direita ou a mão esquerda, com base na posição do
+        dedão e o dedo mindinho.
+
+        Parameters
+        ----------
+        hand: :class:`List[Dict]`
+            Dicionário contendo informações da mão. Ex: 
+            {hand_id, landmarks: [{landmark_id, x, y}]}
+
+        Returns
+        -------
+        :class:`str`
+        """
+        
+        keys: List = hand.keys()
+        keys_count: int = 0
+        
+        for key in keys:
+            if(key == "hand_id"):
+                keys_count += 1
+            elif(key == "landmarks"):
+                keys_count += 1
+
+        if(keys_count == 2):
+            if(hand["landmarks"][PINKY_TIP]["x"] >  hand["landmarks"][THUMB_TIP]["x"]):
+                return "left"
+            else:
+                return "right"
