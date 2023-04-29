@@ -68,7 +68,8 @@ class HandDetector:
         if(self.hands_landmarks):
             for hand_landmarks in self.hands_landmarks:
                 self.mediapipe_draw.draw_landmarks(
-                    self.image, hand_landmarks, 
+                    self.image, 
+                    hand_landmarks,
                     self.mediapipe_hands.HAND_CONNECTIONS
                 )
 
