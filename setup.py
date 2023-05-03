@@ -24,7 +24,7 @@ setup(
     name='handtracking',
     packages=packages,
     version='0.1.0',
-    description='Módulo para detecção de mãos utilizando o pacote Mediapipe.',
+    description='Módulo para detecção de mãos utilizando OpenCv e Medipipe.',
     long_description=readme,
     long_description_content_type="text/markdown",
     url='https://github.com/AllanCapistrano/myanimelistpy',
