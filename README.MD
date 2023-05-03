@@ -1,7 +1,7 @@
 # Hand Tracking
 
 ## 📚 Descrição ##
-Módulo para detecção de mãos utilizando os pacotes [OpenCv]() e [Medipipe]()
+Módulo para detecção de mãos utilizando [OpenCv](https://pypi.org/project/opencv-python/) e [Medipipe](https://mediapipe.dev/).
 
 ## Como utilizar
 
