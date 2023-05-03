@@ -2,7 +2,8 @@ from time import time
 from typing import List, Dict
 
 import cv2
-from handDetector import HandDetector
+
+from handtracking import HandDetector
 
 WEBCAM_INDEX = 0
 
