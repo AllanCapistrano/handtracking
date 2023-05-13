@@ -4,6 +4,9 @@ from mediapipe import solutions
 from cv2 import Mat, cvtColor, COLOR_BGR2RGB
 
 THUMB_TIP: int = 4
+INDEX_FINGER_TIP: int = 8
+MIDDLE_FINGER_TIP: int = 12
+RING_FINGER_TIP: int = 16
 PINKY_TIP: int = 20
 
 class HandDetector:
@@ -146,3 +149,51 @@ class HandDetector:
                 return "left"
             else:
                 return "right"
+            
+    def number_fingers(self) -> int:
+        """ Retorna o número de dedos que estão levantados.
+
+        Returns
+        -------
+        :class:`int`
+        """
+
+        hands: List = self.find_positions()
+
+        count_fingers: int = 0
+
+        if(len(hands) > 0):
+            for hand in hands:
+                for index in range(len(hand["landmarks"])):
+                    if(index == INDEX_FINGER_TIP):
+                        finger_tip: int = hand["landmarks"][index]["y"]
+                        finger_pip: int = hand["landmarks"][index - 2]["y"]
+                        
+                        if(finger_tip < finger_pip):
+                            count_fingers += 1
+                    elif(index == MIDDLE_FINGER_TIP):
+                        finger_tip: int = hand["landmarks"][index]["y"]
+                        finger_pip: int = hand["landmarks"][index - 2]["y"]
+                        
+                        if(finger_tip < finger_pip):
+                            count_fingers += 1
+                    elif(index == RING_FINGER_TIP):
+                        finger_tip: int = hand["landmarks"][index]["y"]
+                        finger_pip: int = hand["landmarks"][index - 2]["y"]
+                        
+                        if(finger_tip < finger_pip):
+                            count_fingers += 1
+                    elif(index == PINKY_TIP):
+                        finger_tip: int = hand["landmarks"][index]["y"]
+                        finger_pip: int = hand["landmarks"][index - 2]["y"]
+                        
+                        if(finger_tip < finger_pip):
+                            count_fingers += 1
+                    elif(index == THUMB_TIP):
+                        thumb_tip: int = hand["landmarks"][THUMB_TIP]["x"]
+                        index_finger_mcp: int = hand["landmarks"][5]["x"]
+                        
+                        if(abs(thumb_tip - index_finger_mcp) > 30):
+                            count_fingers += 1
+           
+        return count_fingers
