@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from mediapipe import solutions
 from cv2 import Mat, cvtColor, COLOR_BGR2RGB
+from numpy import ndarray
 
 THUMB_TIP: int = 4
 INDEX_FINGER_TIP: int = 8
@@ -47,13 +48,13 @@ class HandDetector:
         )
         self.mediapipe_draw = solutions.drawing_utils
 
-    def process_image(self, image) -> None:
+    def process_image(self, image: ndarray) -> None:
         """ Realiza o processamento de uma imagem, em BGR, para as próximas 
         operações.
 
         Parameters
         ----------
-        image: :class:`bool`
+        image: :class:`ndarray`
             Imagem em BGR que será processada.
         """
         
@@ -63,23 +64,28 @@ class HandDetector:
         image_processed = self.hands.process(image_rgb)
         self.hands_landmarks = image_processed.multi_hand_landmarks
     
-    def draw_landmarks(self) -> Mat:   
+    def draw_landmarks(self, image: ndarray) -> ndarray:   
         """ Desenhas as marcações nas mãos presentes em uma imagem.
+
+        Parameters
+        ----------
+        image: :class:`ndarray`
+            Imagem em que será desenhada as marcações .
         
         Returns
         -------
-        imagem: :class:`Mat`
+        :class:`ndarray`
         """
         
         if(self.hands_landmarks):
             for hand_landmarks in self.hands_landmarks:
                 self.mediapipe_draw.draw_landmarks(
-                    self.image, 
+                    image,
                     hand_landmarks,
                     self.mediapipe_hands.HAND_CONNECTIONS
                 )
 
-        return self.image
+        return image
     
     def find_positions(self) -> List[Dict]:
         """ Retorna uma lista contendo as posições (eixo x e y, em pixels) dos 
