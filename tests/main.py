@@ -1,11 +1,21 @@
 from time import time
 from typing import List, Dict
+from os import getenv
 
+from dotenv import load_dotenv
 import cv2
 
 from handtracking import HandDetector
 
-WEBCAM_INDEX = 0
+load_dotenv()
+
+# ------------------------------- CONSTANTES ----------------------------------#
+try:
+    WEBCAM_INDEX = int(getenv("WEBCAM_INDEX"))
+except:
+    print("Erro! O valor de 'WEBCAM_INDEX' deve ser um número inteiro.")
+    exit()
+# -----------------------------------------------------------------------------#
 
 def main():
     fps_start_time: float = 0
@@ -23,7 +33,7 @@ def main():
             key = cv2.waitKey(1)
 
             hand_detector.process_image(frame)
-            image_with_landmarks = hand_detector.draw_landmarks()
+            image_with_landmarks = hand_detector.draw_landmarks(frame)
             hands: List[Dict] = hand_detector.find_positions()
 
             if(len(hands) > 0):
@@ -42,6 +52,9 @@ def main():
                 cv2.putText(image_with_landmarks, f"FPS: {int(fps)}", (10, 40), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 255), 3)
 
             cv2.imshow("Webcam", image_with_landmarks)
+        else:
+            print("Não foi possível iniciar a webcam!")
+            exit()
     
     webcam.release()
 
