@@ -11,7 +11,7 @@ pip install -U git+https://github.com/AllanCapistrano/hand-tracking.git
 
 ### Testar o projeto
 1. Clone este repositório;
-2. Instales as dependências de execução e testes do projeto:
+2. Instale as dependências de execução e testes do projeto:
    ```powershell
    pip install -r requirements.txt
    pip install -r test-requirements.txt
