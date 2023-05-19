@@ -4,11 +4,14 @@ from mediapipe import solutions
 from cv2 import Mat, cvtColor, COLOR_BGR2RGB
 from numpy import ndarray
 
+# ------------------------------- CONSTANTES ----------------------------------#
 THUMB_TIP: int = 4
 INDEX_FINGER_TIP: int = 8
+INDEX_FINGER_MCP: int = 5
 MIDDLE_FINGER_TIP: int = 12
 RING_FINGER_TIP: int = 16
 PINKY_TIP: int = 20
+# -----------------------------------------------------------------------------#
 
 class HandDetector:
     def __init__(
@@ -171,35 +174,121 @@ class HandDetector:
         if(len(hands) > 0):
             for hand in hands:
                 for index in range(len(hand["landmarks"])):
-                    if(index == INDEX_FINGER_TIP):
-                        finger_tip: int = hand["landmarks"][index]["y"]
-                        finger_pip: int = hand["landmarks"][index - 2]["y"]
-                        
-                        if(finger_tip < finger_pip):
-                            count_fingers += 1
-                    elif(index == MIDDLE_FINGER_TIP):
-                        finger_tip: int = hand["landmarks"][index]["y"]
-                        finger_pip: int = hand["landmarks"][index - 2]["y"]
-                        
-                        if(finger_tip < finger_pip):
-                            count_fingers += 1
-                    elif(index == RING_FINGER_TIP):
-                        finger_tip: int = hand["landmarks"][index]["y"]
-                        finger_pip: int = hand["landmarks"][index - 2]["y"]
-                        
-                        if(finger_tip < finger_pip):
-                            count_fingers += 1
-                    elif(index == PINKY_TIP):
-                        finger_tip: int = hand["landmarks"][index]["y"]
-                        finger_pip: int = hand["landmarks"][index - 2]["y"]
-                        
-                        if(finger_tip < finger_pip):
-                            count_fingers += 1
-                    elif(index == THUMB_TIP):
-                        thumb_tip: int = hand["landmarks"][THUMB_TIP]["x"]
-                        index_finger_mcp: int = hand["landmarks"][5]["x"]
-                        
-                        if(abs(thumb_tip - index_finger_mcp) > 30):
-                            count_fingers += 1
+                    if(
+                        index == INDEX_FINGER_TIP and 
+                        self.is_index_finger_raised(hand)
+                    ):
+                        count_fingers += 1
+                    elif(
+                        index == MIDDLE_FINGER_TIP and
+                        self.is_middle_finger_raised(hand)
+                    ):
+                        count_fingers += 1
+                    elif(
+                        index == RING_FINGER_TIP and
+                        self.is_ring_finger_raised(hand)
+                    ):
+                        count_fingers += 1
+                    elif(
+                        index == PINKY_TIP and
+                        self.is_pinky_raised(hand)
+                    ):
+                        count_fingers += 1
+                    elif(
+                        index == THUMB_TIP and
+                        self.is_thumb_raised(hand)
+                    ):
+                        count_fingers += 1
            
         return count_fingers
+
+    def is_index_finger_raised(self, hand: List) -> bool:
+        """ Retorna verdadeiro se o dedo indicador estiver levantado.
+        
+        Parameters
+        ----------
+        hand: :class:`List`
+            Lista contendo as posições dos dedos.
+        
+        Returns
+        -------
+        :class:`bool`
+        """
+        
+        finger_tip: int = hand["landmarks"][INDEX_FINGER_TIP]["y"]
+        finger_pip: int = hand["landmarks"][INDEX_FINGER_TIP - 2]["y"]
+        
+        return True if (finger_tip < finger_pip) else False
+    
+    def is_middle_finger_raised(self, hand: List) -> bool:
+        """ Retorna verdadeiro se o dedo do meio estiver levantado.
+        
+        Parameters
+        ----------
+        hand: :class:`List`
+            Lista contendo as posições dos dedos.
+        
+        Returns
+        -------
+        :class:`bool`
+        """
+        
+        finger_tip: int = hand["landmarks"][MIDDLE_FINGER_TIP]["y"]
+        finger_pip: int = hand["landmarks"][MIDDLE_FINGER_TIP - 2]["y"]
+        
+        return True if (finger_tip < finger_pip) else False
+    
+    def is_ring_finger_raised(self, hand: List) -> bool:
+        """ Retorna verdadeiro se o dedo anelar estiver levantado.
+        
+        Parameters
+        ----------
+        hand: :class:`List`
+            Lista contendo as posições dos dedos.
+        
+        Returns
+        -------
+        :class:`bool`
+        """
+        
+        finger_tip: int = hand["landmarks"][RING_FINGER_TIP]["y"]
+        finger_pip: int = hand["landmarks"][RING_FINGER_TIP - 2]["y"]
+        
+        return True if (finger_tip < finger_pip) else False
+    
+    def is_pinky_raised(self, hand: List) -> bool:
+        """ Retorna verdadeiro se o dedinho estiver levantado.
+        
+        Parameters
+        ----------
+        hand: :class:`List`
+            Lista contendo as posições dos dedos.
+        
+        Returns
+        -------
+        :class:`bool`
+        """
+        
+        finger_tip: int = hand["landmarks"][PINKY_TIP]["y"]
+        finger_pip: int = hand["landmarks"][PINKY_TIP - 2]["y"]
+        
+        return True if (finger_tip < finger_pip) else False
+    
+    def is_thumb_raised(self, hand: List) -> bool:
+        """ Retorna verdadeiro se o dedão estiver levantado.
+        
+        Parameters
+        ----------
+        hand: :class:`List`
+            Lista contendo as posições dos dedos.
+        
+        Returns
+        -------
+        :class:`bool`
+        """
+        
+        thumb_tip: int = hand["landmarks"][THUMB_TIP]["x"]
+        index_finger_mcp: int = hand["landmarks"][INDEX_FINGER_MCP]["x"]
+        
+        return True if abs(thumb_tip - index_finger_mcp) > 30 else False
+        
