@@ -4,16 +4,9 @@ requirements = []
 with open('requirements.txt') as f:
   requirements = f.read().splitlines()
 
-# setup_requirements = []
-# with open('setup-requirements.txt') as f:
-#   setup_requirements = f.read().splitlines()
-
-# test_requirements = []
-# with open('test-requirements.txt') as f:
-#   test_requirements = f.read().splitlines()
-
 packages = [
-    "handtracking"
+    "handtracking",
+    "handtracking.utils"
 ]
 
 readme = ''
@@ -44,7 +37,4 @@ setup(
 	],
     python_requires='>=3.10, <3.11',
     install_requires=requirements,
-    # setup_requires=setup_requirements,
-    # tests_require=test_requirements,
-    # test_suite='tests',
 )
